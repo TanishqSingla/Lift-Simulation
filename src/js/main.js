@@ -12,18 +12,14 @@ class Elevator {
   }
   getState = () => (this.currentState);
   getFloor = () => (this.currentFloor);
-  getElevatorDOM = () => (this.elevatorDOMInstance);
+  getElevatorDOMInstance = () => (this.elevatorDOMInstance);
   setStatusActive = () => this.currentState = this.states[0];
   setStatusIdle = () => this.currentState = this.states[1];
 
   createDOMInstance = () => {
-    const elevator = document.createElement('div');
-    const elevatorDoor = document.createElement('div');
-    elevator.classList.add('elevator');
-    elevatorDoor.classList.add('elevator-door');
-    elevator.appendChild(elevatorDoor);
-    this.elevatorDOMInstance = elevator;
-    return elevator;
+    this.elevatorDOMInstance = createDOMElementWithClass('div', 'elevator');
+    const elevatorDoor = createDOMElementWithClass('div', 'elevator-door'); 
+    this.elevatorDOMInstance.appendChild(elevatorDoor);
   }
 
   ascendToFloor(floor) {
@@ -43,107 +39,82 @@ class Elevator {
   }
 }
 
-class LiftManager {
-  floors = [];
-  elevators = [];
-  constructor(floors, elevators) {
-  }
-};
-
 class Floor {
+  floorIndex;
   floorDownButton;
   floorUpButton;
   floorDOMInstance;
-  constructor() {
+  maxFloors;
+  constructor(floorIndex, maxFloors) {
+    this.floorIndex = floorIndex;
+    this.maxFloors = maxFloors;
     this.createFloorDOMInstance();
   }
   createFloorDOMInstance = () => {
-    const floor = document.createElement('div');
-    floor.classList.add('floor');
+    this.floorDOMInstance = createDOMElementWithClass('div', 'floor');
+    const buttonGroup = createDOMElementWithClass('div', 'elevator-buttons');
+    if(this.floorIndex === 0) {
+      this.floorDownButton = createDOMElementWithClass('button', 'down-button', "Down");
+      buttonGroup.appendChild(this.floorDownButton);
+    } 
+    else if(this.floorIndex === this.maxFloors - 1) {
+      this.floorUpButton = createDOMElementWithClass('button', 'up-button', "Up");
+      buttonGroup.appendChild(this.floorUpButton);
+    }
+    else {
+      this.floorDownButton = createDOMElementWithClass('button', 'down-button', "Down");
+      this.floorUpButton = createDOMElementWithClass('button', 'up-button', "Up");
+      buttonGroup.appendChild(this.floorUpButton);
+      buttonGroup.appendChild(this.floorDownButton);
+    }
+    this.floorDOMInstance.appendChild(buttonGroup);
+  }
+
+  getFloorDOMInstance = () => this.floorDOMInstance;
+  getFloorIndex = () => this.floorIndex;
+}
+
+class Building {
+  floors = [];
+  elevators = [];
+  buildingDOMInstance;
+  constructor(floors, elevators) {
+    this.buildingDOMInstance = document.getElementById('building');
+    for(let i = 0; i < floors; i++) {
+      this.floors.push(new Floor(i, floors))
+    }
+    for(let i = 0; i < elevators; i++) {
+      this.elevators.push(new Elevator(floors, 0))
+    }
+    this.elevators.map(elevator => this.floors[floors - 1].getFloorDOMInstance().appendChild(elevator.getElevatorDOMInstance()));
+
+    this.floors.map(floor => this.buildingDOMInstance.appendChild(floor.getFloorDOMInstance()));
   }
 }
 
-const building = document.getElementById('building');
 const form = document.querySelector('form')
 const floorInput = document.getElementById('floors');
 const elevatorInput = document.getElementById('elevators');
-const createFloorsButton = document.getElementById('createFloorsButton');
 
 let maxFloors = 0;
 let lifts = 0;
-
-
-function createUpButton() {
-  const button = document.createElement('button');
-  button.classList.add('upButton');
-  button.textContent = "UP";
-  return button;
-}
-function createDownButton() {
-  const button = document.createElement('button');
-  button.classList.add('downButton');
-  button.textContent = "DOWN";
-  return button;
-}
-function createElevatorButtons(button = "both") {
-  const elevatorButtons = document.createElement('div');
-  elevatorButtons.classList.add('elevatorButtons');
-  if(button === "up") {
-    elevatorButtons.appendChild(createUpButton());
-  }
-  if(button === "down") {
-    elevatorButtons.appendChild(createDownButton());
-  }
-  if(button === "both") {
-    elevatorButtons.appendChild(createUpButton());
-    elevatorButtons.appendChild(createDownButton());   
-  }
-  return elevatorButtons;
-}
-function createFloor(index) {
-  const floor =  document.createElement('div');
-  floor.classList.add('floor');
-  if(index == 0) {
-    floor.appendChild(createElevatorButtons("up"));
-  }
-  else if(+floorInput.value - index == 1) {
-    floor.appendChild(createElevatorButtons("down"));
-  } else {
-    floor.appendChild(createElevatorButtons());
-  }
-  return floor;
-}
-function createElevator() {
-  const elevator = document.createElement('div');
-  const elevatorDoor = document.createElement('div');
-  elevator.classList.add('elevator');
-  elevatorDoor.classList.add('elevator-door');
-  elevator.appendChild(elevatorDoor)
-  return elevator;
-}
 
 function hanldeSubmitInputs(event) {
   event.preventDefault();
   const floors = +floorInput.value;
   const elevators = +elevatorInput.value;
 
-  if(!(floors && elevators))
-    return;
+  if(!(floors && elevators)) {return;}
+  if(floors < 0 || floors > 5) {return;}
+  if(elevators < 0 || elevators > 5) {return;}
 
-  if(floors < 0 || floors > 5)
-    return;
-  if(elevators < 0 || elevators > 5)
-    return;
+  new Building(floors, elevators);
+  form.style.display = "none";
+}
 
-  // TODO: Initialize building
-  for(let i = 0; i < floors; i++) {
-    building.appendChild(createFloor(i));
-  }
-  for(let i = 0; i < elevators; i++) {
-    building.lastChild.appendChild(createElevator());
-  }
-  
-  floorInput.value = "";
-  elevatorInput.value = "";
-  form.style.display = "none"
+function createDOMElementWithClass(element, className, text = '') {
+  const domElement = document.createElement(element);
+  domElement.classList.add(className);
+  domElement.textContent = text
+  return domElement;
 }

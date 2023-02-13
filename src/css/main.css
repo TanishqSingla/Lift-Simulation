@@ -35,21 +35,22 @@ form > * {
 .elevator-door.open {
   width: 0,
 }
-.elevatorButtons {
+.elevator-buttons {
   display: flex;
   flex-flow: column;
+  margin-right: 1rem;
   gap: 8px;
 }
-.upButton,
-.downButton {
+.up-button,
+.down-button {
   height: 35px;
   border: none;
   cursor: pointer;
   border-radius: 8px;
 }
-.upButton {
+.up-button {
   background: green;
 }
-.downButton {
+.down-button {
   background: yellow;
 }
