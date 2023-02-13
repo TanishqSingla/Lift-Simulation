@@ -22,6 +22,19 @@ form > * {
   gap: 2rem;
 }
 
+.elevator {
+  display: grid;
+  place-items: center;
+}
+.elevator-door {
+  height: 90%;
+  width: 90%;
+  background: blue;
+  transition: 500ms ease-in;
+}
+.elevator-door.open {
+  width: 0,
+}
 .elevatorButtons {
   display: flex;
   flex-flow: column;
@@ -31,6 +44,7 @@ form > * {
 .downButton {
   height: 35px;
   border: none;
+  cursor: pointer;
   border-radius: 8px;
 }
 .upButton {

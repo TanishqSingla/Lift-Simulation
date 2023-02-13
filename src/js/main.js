@@ -3,15 +3,28 @@ class Elevator {
   currentState;
   currentFloor;
   maxFloors;
+  elevatorDOMInstance;
   constructor(maxFloors, currentFloor) {
     this.currentState = this.states[0];
     this.maxFloors = maxFloors;
     this.currentFloor = currentFloor;
+    this.createDOMInstance();
   }
   getState = () => (this.currentState);
   getFloor = () => (this.currentFloor);
+  getElevatorDOM = () => (this.elevatorDOMInstance);
   setStatusActive = () => this.currentState = this.states[0];
   setStatusIdle = () => this.currentState = this.states[1];
+
+  createDOMInstance = () => {
+    const elevator = document.createElement('div');
+    const elevatorDoor = document.createElement('div');
+    elevator.classList.add('elevator');
+    elevatorDoor.classList.add('elevator-door');
+    elevator.appendChild(elevatorDoor);
+    this.elevatorDOMInstance = elevator;
+    return elevator;
+  }
 
   ascendToFloor(floor) {
     this.setStatusIdle();
@@ -27,6 +40,26 @@ class Elevator {
     setTimeout(() => {
       this.setStatusActive();
     }, 500 * floor);
+  }
+}
+
+class LiftManager {
+  floors = [];
+  elevators = [];
+  constructor(floors, elevators) {
+  }
+};
+
+class Floor {
+  floorDownButton;
+  floorUpButton;
+  floorDOMInstance;
+  constructor() {
+    this.createFloorDOMInstance();
+  }
+  createFloorDOMInstance = () => {
+    const floor = document.createElement('div');
+    floor.classList.add('floor');
   }
 }
 
@@ -82,7 +115,10 @@ function createFloor(index) {
 }
 function createElevator() {
   const elevator = document.createElement('div');
+  const elevatorDoor = document.createElement('div');
   elevator.classList.add('elevator');
+  elevatorDoor.classList.add('elevator-door');
+  elevator.appendChild(elevatorDoor)
   return elevator;
 }
 
