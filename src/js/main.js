@@ -4,6 +4,7 @@ class Elevator {
   currentFloor;
   maxFloors;
   elevatorDOMInstance;
+  elevatorDoorDOMInstance;
   constructor(maxFloors, currentFloor) {
     this.currentState = this.states[0];
     this.maxFloors = maxFloors;
@@ -19,27 +20,31 @@ class Elevator {
 
   createDOMInstance = () => {
     this.elevatorDOMInstance = createDOMElementWithClass('div', 'elevator');
-    const elevatorDoor = createDOMElementWithClass('div', 'elevator-door'); 
-    this.elevatorDOMInstance.appendChild(elevatorDoor);
+    this.elevatorDoorDOMInstance = createDOMElementWithClass('div', 'elevator-door'); 
+    this.elevatorDOMInstance.appendChild(this.elevatorDoorDOMInstance);
   }
 
   ascendToFloor(floorIndex) {
     this.setStatusActive();
     this.currentFloor = floorIndex;
     this.elevatorDOMInstance.style.transform = `translateY(-${(this.maxFloors - floorIndex - 1) * floorHeight}px)`;
-    setTimeout(() => {
-      this.setStatusIdle();
+    setTimeout(async () => {
+      await this.openDoors();
     }, 1000 * floorIndex);
   }
   descendToFloor(floorIndex) {
     this.setStatusActive();
     this.currentFloor = floorIndex;
-    setTimeout(() => {
-      this.setStatusIdle();
+    setTimeout(async () => {
+      await this.openDoors();
     }, 900 * floorIndex); // descend is faster, since gravity
   }
-  openDoors() {
-    
+  openDoors = async () => {
+    this.elevatorDoorDOMInstance.classList.add('open');
+    setTimeout(() => {
+      this.elevatorDoorDOMInstance.classList.remove('open');
+      this.setStatusIdle();
+    }, 1500)
   }
 }
 
@@ -80,7 +85,7 @@ class Floor {
   getFloorIndex = () => this.floorIndex;
 }
 
-class Building {
+class Building {;
   floors = [];
   elevators = [];
   buildingDOMInstance;
@@ -113,7 +118,7 @@ class Building {
       const idleElevator = this.elevators.find(elevator => elevator.getState() === "idle");
       idleElevator.ascendToFloor(floorIndex);
     } else {
-      // open doors
+      isElevatorOnFloor.openDoors();
     }
   }
   callElevatorDown(floorIndex) {
@@ -122,7 +127,7 @@ class Building {
       const idleElevator = this.elevators.find(elevator => elevator.getState() === "idle");
       idleElevator.ascendToFloor(floorIndex);
     } else {
-      // open doors
+      isElevatorOnFloor.openDoors()
     }
   }
 }

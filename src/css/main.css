@@ -23,18 +23,17 @@ form > * {
 }
 
 .elevator {
-  display: grid;
-  place-items: center;
   transition: all 1000ms ease-in;
 }
 .elevator-door {
   height: 90%;
-  width: 90%;
+  width: 80%;
+  margin: 8px;
   background: blue;
-  transition: 500ms ease-in;
+  transition: 1000ms ease-in;
 }
 .elevator-door.open {
-  width: 0,
+  width: 0;
 }
 .elevator-buttons {
   display: flex;
