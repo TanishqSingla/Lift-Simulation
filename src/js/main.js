@@ -24,23 +24,22 @@ class Elevator {
   }
 
   ascendToFloor(floorIndex) {
-    console.log("ASCEND TO: ", floorIndex)
     this.setStatusActive();
     this.currentFloor = floorIndex;
-    console.log("SET CURRENT FLOOR: ", floorIndex);
     this.elevatorDOMInstance.style.transform = `translateY(-${(this.maxFloors - floorIndex - 1) * floorHeight}px)`;
     setTimeout(() => {
       this.setStatusIdle();
     }, 1000 * floorIndex);
   }
   descendToFloor(floorIndex) {
-    console.log("ASCEND TO: ", floorIndex)
     this.setStatusActive();
     this.currentFloor = floorIndex;
-    console.log("SET CURRENT FLOOR: ", floorIndex);
     setTimeout(() => {
       this.setStatusIdle();
     }, 900 * floorIndex); // descend is faster, since gravity
+  }
+  openDoors() {
+    
   }
 }
 
@@ -119,7 +118,6 @@ class Building {
   }
   callElevatorDown(floorIndex) {
     const isElevatorOnFloor = this.elevators.find(elevator => elevator.getFloor() === floorIndex);
-    console.log("IsElevatorOnFloor on DOWN", isElevatorOnFloor);
     if(!isElevatorOnFloor) {
       const idleElevator = this.elevators.find(elevator => elevator.getState() === "idle");
       idleElevator.ascendToFloor(floorIndex);
