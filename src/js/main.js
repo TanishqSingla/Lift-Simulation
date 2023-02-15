@@ -28,15 +28,15 @@ class Elevator {
     this.setStatusActive();
     this.currentFloor = floorIndex;
     this.elevatorDOMInstance.style.transform = `translateY(-${(this.maxFloors - floorIndex - 1) * floorHeight}px)`;
-    setTimeout(async () => {
-      await this.openDoors();
-    }, 1000 * floorIndex);
+    setTimeout(() => {
+      this.openDoors();
+    }, 1000);
   }
   descendToFloor(floorIndex) {
     this.setStatusActive();
     this.currentFloor = floorIndex;
-    setTimeout(async () => {
-      await this.openDoors();
+    setTimeout(() => {
+      this.openDoors();
     }, 900 * floorIndex); // descend is faster, since gravity
   }
   openDoors = async () => {
