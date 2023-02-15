@@ -13,8 +13,9 @@ class Elevator {
   getState = () => (this.currentState);
   getFloor = () => (this.currentFloor);
   getElevatorDOMInstance = () => (this.elevatorDOMInstance);
-  setStatusActive = () => this.currentState = this.states[0];
-  setStatusIdle = () => this.currentState = this.states[1];
+  setFloor = (floorIndex) => this.currentFloor = floorIndex;
+  setStatusActive = () => this.currentState = this.states[1];
+  setStatusIdle = () => this.currentState = this.states[0];
 
   createDOMInstance = () => {
     this.elevatorDOMInstance = createDOMElementWithClass('div', 'elevator');
@@ -22,20 +23,24 @@ class Elevator {
     this.elevatorDOMInstance.appendChild(elevatorDoor);
   }
 
-  ascendToFloor(floor) {
-    this.setStatusIdle();
-    this.currentFloor = floor;
-    this.elevatorDOMInstance.style.transform = `translateY(-${floor * floorHeight}px)`;
+  ascendToFloor(floorIndex) {
+    console.log("ASCEND TO: ", floorIndex)
+    this.setStatusActive();
+    this.currentFloor = floorIndex;
+    console.log("SET CURRENT FLOOR: ", floorIndex);
+    this.elevatorDOMInstance.style.transform = `translateY(-${(this.maxFloors - floorIndex - 1) * floorHeight}px)`;
     setTimeout(() => {
-      this.setStatusActive();
-    }, 1000 * floor);
+      this.setStatusIdle();
+    }, 1000 * floorIndex);
   }
-  descendToFloor(floor) {
-    this.setStatusIdle();
-    this.currentFloor = floor;
+  descendToFloor(floorIndex) {
+    console.log("ASCEND TO: ", floorIndex)
+    this.setStatusActive();
+    this.currentFloor = floorIndex;
+    console.log("SET CURRENT FLOOR: ", floorIndex);
     setTimeout(() => {
-      this.setStatusActive();
-    }, 900 * floor);
+      this.setStatusIdle();
+    }, 900 * floorIndex); // descend is faster, since gravity
   }
 }
 
@@ -71,6 +76,8 @@ class Floor {
   }
 
   getFloorDOMInstance = () => this.floorDOMInstance;
+  getUpButton = () => this.floorUpButton;
+  getDownButton = () => this.floorDownButton;
   getFloorIndex = () => this.floorIndex;
 }
 
@@ -81,16 +88,44 @@ class Building {
   constructor(floors, elevators) {
     this.buildingDOMInstance = document.getElementById('building');
     for(let i = 0; i < floors; i++) {
-      this.floors.push(new Floor(i, floors))
+      this.floors.push(new Floor(i, floors));
+      const floorUpButton = this.floors[i].getUpButton();
+      const floorDownButton = this.floors[i].getDownButton();
+      if(floorUpButton) {
+        floorUpButton.addEventListener('click', () => this.callElevatorUp(i))
+      }
+      if(floorDownButton) {
+        floorDownButton.addEventListener('click', () => this.callElevatorDown(i))
+      }
     }
     for(let i = 0; i < elevators; i++) {
-      this.elevators.push(new Elevator(floors, 0))
+      this.elevators.push((new Elevator(floors, 0)))
     }
     this.elevators.map(elevator => this.floors[floors - 1].getFloorDOMInstance().appendChild(elevator.getElevatorDOMInstance()));
+    this.elevators.forEach(elevator => elevator.setFloor(this.floors.length - 1));
 
     this.floors.map(floor => this.buildingDOMInstance.appendChild(floor.getFloorDOMInstance()));
     floorHeight = this.floors[0].floorDOMInstance.offsetHeight;
-    this.elevators[0].ascendToFloor(1);
+  }
+
+  callElevatorUp(floorIndex) {
+    const isElevatorOnFloor = this.elevators.find(elevator => elevator.getFloor() === floorIndex);
+    if(!isElevatorOnFloor) {
+      const idleElevator = this.elevators.find(elevator => elevator.getState() === "idle");
+      idleElevator.ascendToFloor(floorIndex);
+    } else {
+      // open doors
+    }
+  }
+  callElevatorDown(floorIndex) {
+    const isElevatorOnFloor = this.elevators.find(elevator => elevator.getFloor() === floorIndex);
+    console.log("IsElevatorOnFloor on DOWN", isElevatorOnFloor);
+    if(!isElevatorOnFloor) {
+      const idleElevator = this.elevators.find(elevator => elevator.getState() === "idle");
+      idleElevator.ascendToFloor(floorIndex);
+    } else {
+      // open doors
+    }
   }
 }
 
