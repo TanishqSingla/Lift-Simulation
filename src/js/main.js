@@ -24,21 +24,16 @@ class Elevator {
     this.elevatorDOMInstance.appendChild(this.elevatorDoorDOMInstance);
   }
 
-  ascendToFloor(floorIndex) {
+  moveToFloor(floorIndex) {
     this.setStatusActive();
     this.currentFloor = floorIndex;
+    this.elevatorDOMInstance.style.transition = `${(this.maxFloors - floorIndex) * 500}ms ease-in-out`;
     this.elevatorDOMInstance.style.transform = `translateY(-${(this.maxFloors - floorIndex - 1) * floorHeight}px)`;
     setTimeout(() => {
       this.openDoors();
-    }, 1000);
+    }, 500 * (this.maxFloors - floorIndex));
   }
-  descendToFloor(floorIndex) {
-    this.setStatusActive();
-    this.currentFloor = floorIndex;
-    setTimeout(() => {
-      this.openDoors();
-    }, 900 * floorIndex); // descend is faster, since gravity
-  }
+
   openDoors = async () => {
     this.elevatorDoorDOMInstance.classList.add('open');
     setTimeout(() => {
@@ -116,7 +111,7 @@ class Building {;
     const isElevatorOnFloor = this.elevators.find(elevator => elevator.getFloor() === floorIndex);
     if(!isElevatorOnFloor) {
       const idleElevator = this.elevators.find(elevator => elevator.getState() === "idle");
-      idleElevator.ascendToFloor(floorIndex);
+      idleElevator.moveToFloor(floorIndex);
     } else {
       isElevatorOnFloor.openDoors();
     }
@@ -125,7 +120,7 @@ class Building {;
     const isElevatorOnFloor = this.elevators.find(elevator => elevator.getFloor() === floorIndex);
     if(!isElevatorOnFloor) {
       const idleElevator = this.elevators.find(elevator => elevator.getState() === "idle");
-      idleElevator.ascendToFloor(floorIndex);
+      idleElevator.moveToFloor(floorIndex);
     } else {
       isElevatorOnFloor.openDoors()
     }

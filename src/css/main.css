@@ -22,9 +22,6 @@ form > * {
   gap: 2rem;
 }
 
-.elevator {
-  transition: all 1000ms ease-in;
-}
 .elevator-door {
   height: 90%;
   width: 80%;
