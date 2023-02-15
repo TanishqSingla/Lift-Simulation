@@ -25,6 +25,7 @@ form > * {
 .elevator {
   display: grid;
   place-items: center;
+  transition: all 1000ms ease-in;
 }
 .elevator-door {
   height: 90%;

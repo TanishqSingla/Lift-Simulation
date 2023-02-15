@@ -25,17 +25,17 @@ class Elevator {
   ascendToFloor(floor) {
     this.setStatusIdle();
     this.currentFloor = floor;
+    this.elevatorDOMInstance.style.transform = `translateY(-${floor * floorHeight}px)`;
     setTimeout(() => {
       this.setStatusActive();
-    }, 500 * floor);
-    
+    }, 1000 * floor);
   }
   descendToFloor(floor) {
     this.setStatusIdle();
     this.currentFloor = floor;
     setTimeout(() => {
       this.setStatusActive();
-    }, 500 * floor);
+    }, 900 * floor);
   }
 }
 
@@ -89,12 +89,15 @@ class Building {
     this.elevators.map(elevator => this.floors[floors - 1].getFloorDOMInstance().appendChild(elevator.getElevatorDOMInstance()));
 
     this.floors.map(floor => this.buildingDOMInstance.appendChild(floor.getFloorDOMInstance()));
+    floorHeight = this.floors[0].floorDOMInstance.offsetHeight;
+    this.elevators[0].ascendToFloor(1);
   }
 }
 
 const form = document.querySelector('form')
 const floorInput = document.getElementById('floors');
 const elevatorInput = document.getElementById('elevators');
+let floorHeight;
 
 let maxFloors = 0;
 let lifts = 0;
