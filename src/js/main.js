@@ -26,12 +26,14 @@ class Elevator {
 
   moveToFloor(floorIndex) {
     this.setStatusActive();
+    const floorTransitionDifference = Math.abs(this.currentFloor - floorIndex);
+    const floorIndexOffset = this.maxFloors - floorIndex;
     this.currentFloor = floorIndex;
-    this.elevatorDOMInstance.style.transition = `${(this.maxFloors - floorIndex) * 500}ms ease-in-out`;
-    this.elevatorDOMInstance.style.transform = `translateY(-${(this.maxFloors - floorIndex - 1) * floorHeight}px)`;
+    this.elevatorDOMInstance.style.transition = `${(floorTransitionDifference) * 500}ms ease-in-out`;
+    this.elevatorDOMInstance.style.transform = `translateY(-${(floorIndexOffset - 1) * floorHeight}px)`;
     setTimeout(() => {
       this.openDoors();
-    }, 500 * (this.maxFloors - floorIndex));
+    }, 500 * floorTransitionDifference);
   }
 
   openDoors = async () => {
