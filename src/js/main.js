@@ -184,10 +184,10 @@ function hanldeSubmitInputs(event) {
   if (!(floors && elevators)) {
     return;
   }
-  if (floors < 0 || floors > 5) {
+  if (floors <= 0) {
     return;
   }
-  if (elevators < 0 || elevators > 5) {
+  if (elevators <= 0) {
     return;
   }
 
