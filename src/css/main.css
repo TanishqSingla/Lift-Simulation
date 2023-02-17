@@ -27,7 +27,7 @@ form > * {
   width: 80%;
   margin: 8px;
   background: blue;
-  transition: 1500ms ease-in;
+  transition: 2500ms ease-in;
 }
 .elevator-door.open {
   width: 0;

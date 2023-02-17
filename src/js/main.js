@@ -33,22 +33,22 @@ class Elevator {
     const floorIndexOffset = this.maxFloors - floorIndex;
     this.currentFloor = floorIndex;
     this.elevatorDOMInstance.style.transition = `${
-      floorTransitionDifference * 500
+      floorTransitionDifference * 2000
     }ms ease-in-out`;
     this.elevatorDOMInstance.style.transform = `translateY(-${
       (floorIndexOffset - 1) * floorHeight
     }px)`;
     setTimeout(() => {
       this.openDoors();
-    }, 500 * floorTransitionDifference);
+    }, 2000 * floorTransitionDifference);
   }
 
-  openDoors = async () => {
+  openDoors = () => {
     this.elevatorDoorDOMInstance.classList.add("open");
     setTimeout(() => {
       this.elevatorDoorDOMInstance.classList.remove("open");
       this.setStatusIdle();
-    }, 1500);
+    }, 5000);
   };
 }
 
