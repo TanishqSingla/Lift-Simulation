@@ -17,8 +17,8 @@ class Elevator {
   getElevatorDOMInstance = () => this.elevatorDOMInstance;
   getElevatorTimeout = () => this.elevatorTimeout;
   setFloor = (floorIndex) => (this.currentFloor = floorIndex);
-  setStatusActive = () => {this.currentState = this.states[1]; console.log("active")};
-  setStatusIdle = () => {this.currentState = this.states[0]; console.log("idle")};
+  setStatusActive = () => (this.currentState = this.states[1]);
+  setStatusIdle = () => (this.currentState = this.states[0]);
 
   createDOMInstance = () => {
     this.elevatorDOMInstance = createDOMElementWithClass("div", "elevator");
