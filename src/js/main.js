@@ -146,15 +146,23 @@ class Building {
     const isElevatorOnFloor = this.elevators.find(
       (elevator) => elevator.getFloor() === floorIndex
     );
-    if (!isElevatorOnFloor) {
-      const idleElevator = this.elevators.find(
-        (elevator) => elevator.getState() === "idle"
-      );
-      idleElevator.moveToFloor(floorIndex);
-    } else {
+
+    if(isElevatorOnFloor) {
       isElevatorOnFloor.setStatusActive();
       clearTimeout(isElevatorOnFloor.getElevatorTimeout());
       isElevatorOnFloor.openDoors();
+    } else {
+      const pendingInterval = setInterval(() => {
+        const idleElevator = this.elevators.find(
+          (elevator) => elevator.getState() === "idle"
+        );
+        if(idleElevator) {
+          idleElevator.moveToFloor(floorIndex);
+          clearInterval(pendingInterval);
+        }
+      }, 1000);
+
+
     }
   }
 }
