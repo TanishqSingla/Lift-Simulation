@@ -150,6 +150,7 @@ class Building {
       );
       idleElevator.moveToFloor(floorIndex);
     } else {
+      isElevatorOnFloor.setStatusActive();
       isElevatorOnFloor.openDoors();
     }
   }
@@ -163,6 +164,7 @@ class Building {
       );
       idleElevator.moveToFloor(floorIndex);
     } else {
+      isElevatorOnFloor.setStatusActive();
       isElevatorOnFloor.openDoors();
     }
   }
