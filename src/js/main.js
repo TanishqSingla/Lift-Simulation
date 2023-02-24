@@ -42,26 +42,25 @@ class Elevator {
   };
 
   moveToFloor(floorIndex) {
-    this.setStatusActive();
-    const floorTransitionDifference = Math.abs(this.currentFloor - floorIndex);
-    const floorIndexOffset = this.maxFloors - floorIndex;
+    this.currentState = states.ACTIVE;
+    const totalTime = Math.abs(this.currentFloor - floorIndex) * 2000;
+    const floorIndexOffset = this.maxFloors - floorIndex - 1;
     this.currentFloor = floorIndex;
-    this.elevatorDOMInstance.style.transition = `${
-      floorTransitionDifference * 2000
-    }ms ease-in-out`;
-    this.elevatorDOMInstance.style.transform = `translateY(-${
-      (floorIndexOffset - 1) * floorHeight
-    }px)`;
+    this.elevatorDOMInstance.style.transition = `${totalTime}ms ease-in-out`;
+    this.elevatorDOMInstance.style.transform = `translateY(-${floorIndexOffset * floorHeight}px)`;
     this.elevatorTimeout = setTimeout(() => {
       this.openDoors();
-    }, 2000 * floorTransitionDifference);
+    }, totalTime);
   }
 
   openDoors = () => {
     this.elevatorDoorDOMInstance.classList.add("open");
     this.elevatorTimeout = setTimeout(() => {
       this.elevatorDoorDOMInstance.classList.remove("open");
-      setTimeout(() => this.setStatusIdle(), 2500);
+      setTimeout(() => {
+        this.currentState = states.IDLE
+        this.currentDirection = direction.NONE;
+      }, 2500);
     }, 5000);
   };
 }
@@ -158,7 +157,7 @@ class Building {
     const idleElevator = this.elevators.find(
       (elevator) => elevator.getState() === states.IDLE
     );
-    if(idleElevator) {
+    if (idleElevator) {
       idleElevator.moveToFloor(floorIndex);
       return 0; // exits succesfully
     }
@@ -170,18 +169,16 @@ class Building {
       (elevator) => elevator.getFloor() === floorIndex
     );
 
-    if(isElevatorOnFloor) {
+    if (isElevatorOnFloor) {
       isElevatorOnFloor.setStatusActive();
       clearTimeout(isElevatorOnFloor.getElevatorTimeout());
       isElevatorOnFloor.openDoors();
     }
     else {
-      if(this.callElevator(floorIndex)) {
+      if (this.callElevator(floorIndex)) {
         const pendingInterval = setInterval(() => {
-          if(!this.callElevator(floorIndex)) {
-            clearTimeout(pendingInterval);
-          }
-        }, 500)
+          !this.callElevator(floorIndex) && clearTimeout(pendingInterval);
+        }, 500);
       }
     }
   }
