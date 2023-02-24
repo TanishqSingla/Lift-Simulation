@@ -1,53 +1,53 @@
 .elevator {
-  height: 100px;
-  width: 70px;
-  border: solid 1px black;
+	height: 100px;
+	width: 70px;
+	border: solid 1px black;
 }
 
 form {
-  margin: 0 auto;
-  min-height: 8rem;
-  width: 12rem;
-  padding: 2rem;
+	margin: 0 auto;
+	min-height: 8rem;
+	width: 12rem;
+	padding: 2rem;
 }
 form > * {
-  margin: 8px 0;
+	margin: 8px 0;
 }
 
 .floor {
-  height: 100px;
-  border-bottom: solid 2px black;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
+	height: 100px;
+	border-bottom: solid 2px black;
+	display: flex;
+	align-items: center;
+	gap: 2rem;
 }
 
 .elevator-door {
-  height: 90%;
-  width: 80%;
-  margin: 8px;
-  background: blue;
-  transition: 2500ms ease-in;
+	height: 90%;
+	width: 80%;
+	margin: 8px;
+	background: blue;
+	transition: 2500ms ease-in;
 }
 .elevator-door.open {
-  width: 0;
+	width: 0;
 }
 .elevator-buttons {
-  display: flex;
-  flex-flow: column;
-  margin-right: 1rem;
-  gap: 8px;
+	display: flex;
+	flex-flow: column;
+	margin-right: 1rem;
+	gap: 8px;
 }
 .up-button,
 .down-button {
-  height: 35px;
-  border: none;
-  cursor: pointer;
-  border-radius: 8px;
+	height: 35px;
+	border: none;
+	cursor: pointer;
+	border-radius: 8px;
 }
 .up-button {
-  background: green;
+	background: green;
 }
 .down-button {
-  background: yellow;
+	background: yellow;
 }
