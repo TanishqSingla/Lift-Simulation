@@ -1,5 +1,9 @@
+const states = {
+  IDLE: 0,
+  ACTIVE: 1
+}
+
 class Elevator {
-  states = ["idle", "active"];
   currentState;
   currentFloor;
   maxFloors;
@@ -7,7 +11,7 @@ class Elevator {
   elevatorDoorDOMInstance;
   elevatorTimeout;
   constructor(maxFloors, currentFloor) {
-    this.currentState = this.states[0];
+    this.currentState = states.IDLE;
     this.maxFloors = maxFloors;
     this.currentFloor = currentFloor;
     this.createDOMInstance();
@@ -17,8 +21,8 @@ class Elevator {
   getElevatorDOMInstance = () => this.elevatorDOMInstance;
   getElevatorTimeout = () => this.elevatorTimeout;
   setFloor = (floorIndex) => (this.currentFloor = floorIndex);
-  setStatusActive = () => (this.currentState = this.states[1]);
-  setStatusIdle = () => (this.currentState = this.states[0]);
+  setStatusActive = () => (this.currentState = states.ACTIVE);
+  setStatusIdle = () => (this.currentState = states.IDLE);
 
   createDOMInstance = () => {
     this.elevatorDOMInstance = createDOMElementWithClass("div", "elevator");
@@ -154,7 +158,7 @@ class Building {
     } else {
       const pendingInterval = setInterval(() => {
         const idleElevator = this.elevators.find(
-          (elevator) => elevator.getState() === "idle"
+          (elevator) => elevator.getState() === states.IDLE
         );
         if(idleElevator) {
           idleElevator.moveToFloor(floorIndex);
