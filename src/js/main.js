@@ -181,7 +181,7 @@ class Building {
           if(!this.callElevator(floorIndex)) {
             clearTimeout(pendingInterval);
           }
-        })
+        }, 500)
       }
     }
   }
